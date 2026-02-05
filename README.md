@@ -5,6 +5,7 @@
 git cloneが不要です！
 
 1. uvをインストールする
+
 Windowsの場合
 ```
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
@@ -62,6 +63,7 @@ git clone https://github.com/vuchvu/qr-print-helper
 2. pythonをインストールする
 
 3. 仮想環境作成・依存関係のインストールをする
+
 Windowsの場合
 ```
 python -m venv .venv
