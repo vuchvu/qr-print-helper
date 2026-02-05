@@ -37,6 +37,8 @@ def main():
 
     input_dir = Path(args.input_dir)
     mapping = {image.stem: str(image) for image in sorted(input_dir.glob("*.png"))}
+    if len(mapping) <= 0:
+        raise FileNotFoundError(f"{input_dir}の中にpngファイルがありません")
 
     create_layout_pdf(
         mapping,
