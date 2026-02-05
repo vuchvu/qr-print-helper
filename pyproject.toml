@@ -8,3 +8,10 @@ dependencies = [
     "pillow>=12.1.0",
     "reportlab>=4.4.9",
 ]
+
+[project.scripts]
+qr-print-helper = "cli:main"
+
+[tool.setuptools]
+py-modules = ["cli"]
+packages = ["core"]
