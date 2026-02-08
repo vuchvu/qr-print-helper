@@ -1,3 +1,5 @@
 charset-normalizer==3.4.4
+nuitka==4.0
 pillow==12.1.0
 reportlab==4.4.9
+zstandard==0.25.0

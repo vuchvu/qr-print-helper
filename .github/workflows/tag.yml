@@ -1,0 +1,51 @@
+name: Auto Tag
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  tag:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine bump type
+        id: bump
+        run: |
+          LABELS='${{ toJSON(github.event.pull_request.labels.*.name) }}'
+          if echo "$LABELS" | grep -q '"major"'; then
+            echo "type=major" >> "$GITHUB_OUTPUT"
+          elif echo "$LABELS" | grep -q '"minor"'; then
+            echo "type=minor" >> "$GITHUB_OUTPUT"
+          elif echo "$LABELS" | grep -q '"patch"'; then
+            echo "type=patch" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump version and tag
+        if: steps.bump.outputs.type != ''
+        run: |
+          current=$(grep -m1 'version = ' pyproject.toml | sed 's/.*"\(.*\)".*/\1/')
+          IFS='.' read -r major minor patch <<< "$current"
+
+          case "${{ steps.bump.outputs.type }}" in
+            major) major=$((major + 1)); minor=0; patch=0 ;;
+            minor) minor=$((minor + 1)); patch=0 ;;
+            patch) patch=$((patch + 1)) ;;
+          esac
+
+          next="${major}.${minor}.${patch}"
+          sed -i "s/version = \"${current}\"/version = \"${next}\"/" pyproject.toml
+          sed -i "s/# qr-print-helper.*/# qr-print-helper v${next}/" RELEASE_README.md
+          sed -i "s/AppVersion=.*/AppVersion=${next}/" assets/installer.iss
+          sed -i "s/VersionInfoVersion=.*/VersionInfoVersion=${next}/" assets/installer.iss
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pyproject.toml RELEASE_README.md assets/installer.iss
+          git commit -m "v${next}"
+          git tag "v${next}"
+          git push origin main --tags
