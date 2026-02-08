@@ -4,29 +4,44 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from pathlib import Path
 
+from core.constants import (
+    APP_NAME,
+    DEFAULT_COLS,
+    DEFAULT_INPUT_DIR,
+    DEFAULT_OUTPUT,
+    DEFAULT_ROWS,
+    ERR_DIR_NOT_FOUND,
+    ERR_NO_IMAGES,
+    ERR_NO_OUTPUT,
+    IMAGE_GLOB,
+    LABEL_COLS,
+    LABEL_INPUT_DIR,
+    LABEL_OUTPUT,
+    LABEL_ROWS,
+)
 from core.layout import create_layout_pdf
 
 
 class App:
     def __init__(self, root: tk.Tk):
         self.root = root
-        self.root.title("QR Print Helper")
+        self.root.title(APP_NAME)
         self.root.resizable(False, False)
 
         self._ensure_images_dir()
         self._build_widgets()
 
     def _ensure_images_dir(self):
-        images_dir = Path("images")
+        images_dir = Path(DEFAULT_INPUT_DIR)
         if not images_dir.exists():
             images_dir.mkdir()
 
     def _build_widgets(self):
         # --- 入力ディレクトリ ---
-        tk.Label(self.root, text="QR画像ディレクトリ:").grid(
+        tk.Label(self.root, text=f"{LABEL_INPUT_DIR}:").grid(
             row=0, column=0, sticky="e", padx=(10, 4), pady=(10, 4)
         )
-        self.input_dir_var = tk.StringVar(value="images")
+        self.input_dir_var = tk.StringVar(value=DEFAULT_INPUT_DIR)
         self.input_dir_entry = tk.Entry(
             self.root, textvariable=self.input_dir_var, width=40
         )
@@ -39,10 +54,10 @@ class App:
         self.input_dir_var.trace_add("write", lambda *_: self._refresh_file_list())
 
         # --- 出力PDFファイル名 ---
-        tk.Label(self.root, text="出力PDFファイル名:").grid(
+        tk.Label(self.root, text=f"{LABEL_OUTPUT}:").grid(
             row=1, column=0, sticky="e", padx=(10, 4), pady=4
         )
-        self.output_var = tk.StringVar(value="labels.pdf")
+        self.output_var = tk.StringVar(value=DEFAULT_OUTPUT)
         tk.Entry(self.root, textvariable=self.output_var, width=40).grid(
             row=1, column=1, padx=4, pady=4
         )
@@ -51,19 +66,19 @@ class App:
         )
 
         # --- 列数 ---
-        tk.Label(self.root, text="列数:").grid(
+        tk.Label(self.root, text=f"{LABEL_COLS}:").grid(
             row=2, column=0, sticky="e", padx=(10, 4), pady=4
         )
-        self.col_var = tk.IntVar(value=2)
+        self.col_var = tk.IntVar(value=DEFAULT_COLS)
         tk.Spinbox(
             self.root, from_=1, to=10, textvariable=self.col_var, width=5
         ).grid(row=2, column=1, sticky="w", padx=4, pady=4)
 
         # --- 行数 ---
-        tk.Label(self.root, text="行数:").grid(
+        tk.Label(self.root, text=f"{LABEL_ROWS}:").grid(
             row=3, column=0, sticky="e", padx=(10, 4), pady=4
         )
-        self.row_var = tk.IntVar(value=3)
+        self.row_var = tk.IntVar(value=DEFAULT_ROWS)
         tk.Spinbox(
             self.root, from_=1, to=10, textvariable=self.row_var, width=5
         ).grid(row=3, column=1, sticky="w", padx=4, pady=4)
@@ -116,7 +131,7 @@ class App:
         self.file_listbox.delete(0, tk.END)
         input_dir = Path(self.input_dir_var.get())
         if input_dir.is_dir():
-            files = sorted(input_dir.glob("*.png"))
+            files = sorted(input_dir.glob(IMAGE_GLOB))
             for f in files:
                 self.file_listbox.insert(tk.END, f.name)
             self.file_count_var.set(f"画像一覧: ({len(files)}件)")
@@ -128,18 +143,18 @@ class App:
         output = self.output_var.get().strip()
 
         if not input_dir.is_dir():
-            messagebox.showerror("エラー", f"ディレクトリが見つかりません: {input_dir}")
+            messagebox.showerror("エラー", ERR_DIR_NOT_FOUND.format(input_dir=input_dir))
             return
 
         mapping = {
-            image.stem: str(image) for image in sorted(input_dir.glob("*.png"))
+            image.stem: str(image) for image in sorted(input_dir.glob(IMAGE_GLOB))
         }
         if not mapping:
-            messagebox.showerror("エラー", f"{input_dir} の中にPNGファイルがありません")
+            messagebox.showerror("エラー", ERR_NO_IMAGES.format(input_dir=input_dir))
             return
 
         if not output:
-            messagebox.showerror("エラー", "出力PDFファイル名を指定してください")
+            messagebox.showerror("エラー", ERR_NO_OUTPUT)
             return
 
         output_path = Path(output).resolve()
