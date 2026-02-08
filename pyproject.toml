@@ -12,6 +12,9 @@ dependencies = [
 [project.scripts]
 qr-print-helper = "cli:main"
 
+[project.gui-scripts]
+qr-print-helper-gui = "gui:main"
+
 [tool.setuptools]
-py-modules = ["cli"]
+py-modules = ["cli", "gui"]
 packages = ["core"]
