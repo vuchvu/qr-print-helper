@@ -1,0 +1,119 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    # strategy:
+    #   matrix:
+    #     include:
+    #       - os: windows-latest
+    #         suffix: windows
+    #       - os: macos-latest
+    #         suffix: macos
+    # runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version-file: .python-version
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv pip install --system ".[build]"
+
+      - name: Cache Nuitka
+        uses: actions/cache@v4
+        with:
+          path: .nuitka-cache
+          key: nuitka-${{ runner.os }}-${{ hashFiles('gui.py', 'core/**/*.py') }}
+          restore-keys: nuitka-${{ runner.os }}-
+
+      - name: Build with Nuitka (Windows)
+        # if: runner.os == 'Windows'
+        env:
+          NUITKA_CACHE_DIR: .nuitka-cache
+        run: >-
+          python -m nuitka gui.py
+          --standalone --onefile --enable-plugin=tk-inter
+          --output-dir=build -o qr-print-helper
+          --windows-console-mode=disable
+          --windows-icon-from-ico=assets/icon.ico
+          --lto=yes --assume-yes-for-downloads
+
+      # - name: Build with Nuitka (macOS)
+      #   if: runner.os == 'macOS'
+      #   env:
+      #     NUITKA_CACHE_DIR: .nuitka-cache
+      #   run: >-
+      #     python -m nuitka gui.py
+      #     --standalone --onefile --enable-plugin=tk-inter
+      #     --output-dir=build -o qr-print-helper
+      #     --macos-target-arch=universal
+      #     --macos-app-icon=assets/icon.icns
+      #     --lto=yes --assume-yes-for-downloads
+
+      - name: Build installer (Windows)
+        # if: runner.os == 'Windows'
+        run: |
+          Copy-Item RELEASE_README.md build/README.txt
+          iscc /F"qr-print-helper-${{ github.ref_name }}-installer" assets/installer.iss
+        shell: pwsh
+
+      - name: Create zip package (Windows)
+        # if: runner.os == 'Windows'
+        run: |
+          New-Item -ItemType Directory -Path staging
+          Copy-Item build/qr-print-helper.exe staging/
+          Copy-Item RELEASE_README.md staging/README.txt
+          Compress-Archive -Path staging/* -DestinationPath "qr-print-helper-${{ github.ref_name }}-windows.zip"
+        shell: pwsh
+
+      # - name: Create zip package (macOS)
+      #   if: runner.os == 'macOS'
+      #   run: |
+      #     mkdir staging
+      #     cp build/qr-print-helper staging/
+      #     cp RELEASE_README.md staging/README.txt
+      #     cd staging && zip -r "../qr-print-helper-${{ github.ref_name }}-macos.zip" .
+      #   shell: bash
+
+      - name: Upload zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          # name: qr-print-helper-${{ matrix.suffix }}
+          # path: qr-print-helper-${{ github.ref_name }}-${{ matrix.suffix }}.zip
+          name: qr-print-helper-windows
+          path: qr-print-helper-${{ github.ref_name }}-windows.zip
+
+      - name: Upload installer artifact
+        # if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: qr-print-helper-installer
+          path: build/qr-print-helper-${{ github.ref_name }}-installer.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            qr-print-helper-windows/*.zip
+            # qr-print-helper-macos/*.zip
+            qr-print-helper-installer/*.exe
