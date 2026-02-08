@@ -32,7 +32,7 @@ class App:
         self._build_widgets()
 
     def _ensure_images_dir(self):
-        images_dir = Path(DEFAULT_INPUT_DIR)
+        images_dir = Path(DEFAULT_INPUT_DIR).resolve()
         if not images_dir.exists():
             images_dir.mkdir()
 
@@ -41,7 +41,9 @@ class App:
         tk.Label(self.root, text=f"{LABEL_INPUT_DIR}:").grid(
             row=0, column=0, sticky="e", padx=(10, 4), pady=(10, 4)
         )
-        self.input_dir_var = tk.StringVar(value=DEFAULT_INPUT_DIR)
+        self.input_dir_var = tk.StringVar(
+            value=str(Path(DEFAULT_INPUT_DIR).resolve())
+        )
         self.input_dir_entry = tk.Entry(
             self.root, textvariable=self.input_dir_var, width=40
         )
@@ -57,7 +59,9 @@ class App:
         tk.Label(self.root, text=f"{LABEL_OUTPUT}:").grid(
             row=1, column=0, sticky="e", padx=(10, 4), pady=4
         )
-        self.output_var = tk.StringVar(value=DEFAULT_OUTPUT)
+        self.output_var = tk.StringVar(
+            value=str(Path(DEFAULT_OUTPUT).resolve())
+        )
         tk.Entry(self.root, textvariable=self.output_var, width=40).grid(
             row=1, column=1, padx=4, pady=4
         )
@@ -115,12 +119,19 @@ class App:
         self._refresh_file_list()
 
     def _browse_input_dir(self):
-        path = filedialog.askdirectory()
+        current = Path(self.input_dir_var.get())
+        initial = str(current) if current.is_dir() else str(Path.cwd())
+        path = filedialog.askdirectory(initialdir=initial)
         if path:
             self.input_dir_var.set(path)
 
     def _browse_output(self):
+        current = Path(self.output_var.get())
+        parent = current.parent
+        initial = str(parent) if parent.is_dir() else str(Path.cwd())
         path = filedialog.asksaveasfilename(
+            initialdir=initial,
+            initialfile=current.name,
             defaultextension=".pdf",
             filetypes=[("PDF files", "*.pdf")],
         )
