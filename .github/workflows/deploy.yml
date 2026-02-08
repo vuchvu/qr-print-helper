@@ -49,6 +49,7 @@ jobs:
           --output-dir=build -o qr-print-helper
           --windows-console-mode=disable
           --windows-icon-from-ico=assets/icon.ico
+          --include-data-files=assets/icon.ico=assets/icon.ico
           --lto=yes --assume-yes-for-downloads
 
       # - name: Build with Nuitka (macOS)

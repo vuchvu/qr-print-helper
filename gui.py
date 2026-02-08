@@ -27,9 +27,20 @@ class App:
         self.root = root
         self.root.title(APP_NAME)
         self.root.resizable(False, False)
+        self._set_icon()
 
         self._ensure_images_dir()
         self._build_widgets()
+
+    def _set_icon(self):
+        ico_path = Path(__file__).parent / "assets" / "icon.ico"
+        png_path = Path(__file__).parent / "assets" / "icon.png"
+
+        if sys.platform == "win32" and ico_path.exists():
+            self.root.iconbitmap(default=str(ico_path))
+        elif png_path.exists():
+            icon = tk.PhotoImage(file=str(png_path))
+            self.root.iconphoto(True, icon)
 
     def _ensure_images_dir(self):
         images_dir = Path(DEFAULT_INPUT_DIR).resolve()
