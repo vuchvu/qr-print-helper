@@ -7,7 +7,7 @@
 
 1. インストーラーのダウンロード
 
-[最新リリースページ](https://github.com/vuchvu/qr-print-helper/releases/latest)から、`qr-print-helper-v0.2.2-installer.exe`をダウンロードする
+[最新リリースページ](https://github.com/vuchvu/qr-print-helper/releases/latest)から、`qr-print-helper-vx.x.x-installer.exe`をダウンロードする
 
 2. インストールの実行
 
