@@ -2,7 +2,7 @@ name: PR Label Check
 
 on:
   pull_request:
-    types: [opened, labeled, unlabeled, synchronize]
+    types: [labeled, unlabeled]
     branches:
       - main
 
