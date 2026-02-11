@@ -107,18 +107,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/download-artifact@v4
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+
+      - name: Get previous release tag
+        id: prev_release
+        run: echo "tag=$(gh release view --json tagName -q .tagName)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Changelog
         id: changelog
         uses: mikepenz/release-changelog-builder-action@v4
         with:
           configuration: ".github/changelog-config.json"
+          fromTag: ${{ steps.prev_release.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
