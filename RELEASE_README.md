@@ -1,4 +1,4 @@
-# qr-print-helper v1.0.7
+# qr-print-helper v1.0.8
 
 QR コード画像から印刷用 PDF を生成するツールです。
 
