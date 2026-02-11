@@ -1,0 +1,23 @@
+{
+  "categories": [
+    {
+      "title": "## 🚀 新機能",
+      "labels": ["feature", "enhancement"]
+    },
+    {
+      "title": "## 🐛 バグ修正",
+      "labels": ["bug", "fix"]
+    },
+    {
+      "title": "## 📚 ドキュメント",
+      "labels": ["documentation"]
+    },
+    {
+      "title": "## 🔧 その他の変更",
+      "labels": ["*"]
+    }
+  ],
+  "ignore_labels": ["major", "minor", "patch"],
+  "template": "${{CHANGELOG}}\n\n**Full Changelog**: ${{FROM_TAG}}...${{TO_TAG}}",
+  "pr_template": "- ${{TITLE}} (${{NUMBER}})"
+}
