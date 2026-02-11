@@ -16,7 +16,11 @@ jobs:
           - os: windows-latest
             suffix: windows
           - os: macos-latest
-            suffix: macos
+            suffix: macos-arm64
+            arch: arm64
+          - os: macos-13
+            suffix: macos-x86_64
+            arch: x86_64
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -59,7 +63,7 @@ jobs:
           uv run python -m nuitka gui.py
           --standalone --onefile --enable-plugin=tk-inter
           --output-dir=build -o qr-print-helper
-          --macos-target-arch=universal
+          --macos-target-arch=${{ matrix.arch }}
           --macos-app-icon=assets/icon.icns
           --lto=yes --assume-yes-for-downloads
 
@@ -85,7 +89,7 @@ jobs:
           mkdir staging
           cp build/qr-print-helper staging/
           cp RELEASE_README.md staging/README.txt
-          cd staging && zip -r "../qr-print-helper-${{ github.ref_name }}-macos.zip" .
+          cd staging && zip -r "../qr-print-helper-${{ github.ref_name }}-${{ matrix.suffix }}.zip" .
         shell: bash
 
       - name: Upload zip artifact
@@ -127,7 +131,8 @@ jobs:
           body: ${{ steps.changelog.outputs.changelog }}
           files: |
             qr-print-helper-windows/*.zip
-            qr-print-helper-macos/*.zip
+            qr-print-helper-macos-arm64/*.zip
+            qr-print-helper-macos-x86_64/*.zip
             qr-print-helper-installer/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
