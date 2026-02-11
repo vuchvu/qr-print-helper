@@ -129,5 +129,5 @@ jobs:
             qr-print-helper-windows/*.zip
             qr-print-helper-macos/*.zip
             qr-print-helper-installer/*.exe
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
