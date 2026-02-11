@@ -18,9 +18,6 @@ jobs:
           - os: macos-latest
             suffix: macos-arm64
             arch: arm64
-          - os: macos-13
-            suffix: macos-x86_64
-            arch: x86_64
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -132,7 +129,6 @@ jobs:
           files: |
             qr-print-helper-windows/*.zip
             qr-print-helper-macos-arm64/*.zip
-            qr-print-helper-macos-x86_64/*.zip
             qr-print-helper-installer/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
