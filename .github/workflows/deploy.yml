@@ -29,7 +29,7 @@ jobs:
           enable-cache: true
 
       - name: Install dependencies
-        run: uv pip install --system ".[build]"
+        run: uv sync --extra build
 
       - name: Cache Nuitka
         uses: actions/cache@v4
@@ -43,7 +43,7 @@ jobs:
         env:
           NUITKA_CACHE_DIR: .nuitka-cache
         run: >-
-          python -m nuitka gui.py
+          uv run python -m nuitka gui.py
           --standalone --onefile --enable-plugin=tk-inter
           --output-dir=build -o qr-print-helper
           --windows-console-mode=disable
@@ -56,7 +56,7 @@ jobs:
         env:
           NUITKA_CACHE_DIR: .nuitka-cache
         run: >-
-          python -m nuitka gui.py
+          uv run python -m nuitka gui.py
           --standalone --onefile --enable-plugin=tk-inter
           --output-dir=build -o qr-print-helper
           --macos-target-arch=universal
