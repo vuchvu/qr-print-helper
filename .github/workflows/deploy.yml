@@ -64,7 +64,7 @@ jobs:
           --standalone --onefile --enable-plugin=tk-inter
           --output-dir=build -o qr-print-helper
           --macos-target-arch=${{ matrix.arch }}
-          --macos-app-icon=assets/icon.icns
+          --macos-app-icon=assets/icon.png
           --lto=yes --assume-yes-for-downloads
 
       - name: Build installer (Windows)
