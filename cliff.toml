@@ -1,0 +1,27 @@
+[changelog]
+body = """
+{% for group, commits in commits | group_by(attribute="group") %}\
+### {{ group }}
+{% for commit in commits %}\
+- {% if commit.scope %}**{{ commit.scope }}**: {% endif %}{{ commit.message }}
+{% endfor %}
+{% endfor %}\
+"""
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = false
+commit_parsers = [
+  { message = "^feat", group = "🚀 新機能" },
+  { message = "^fix", group = "🐛 バグ修正" },
+  { message = "^docs", group = "📚 ドキュメント" },
+  { message = "^refactor", group = "🔧 リファクタリング" },
+  { message = "^chore\\(release\\)", skip = true },
+  { message = "^chore", group = "🔧 その他の変更" },
+  { message = "^ci", skip = true },
+  { message = "^Merge", skip = true },
+  { message = "^v\\d", skip = true },
+]
+filter_commits = true
+tag_pattern = "v[0-9].*"
