@@ -42,8 +42,14 @@ class App:
             icon = tk.PhotoImage(file=str(png_path))
             self.root.iconphoto(True, icon)
 
+    @staticmethod
+    def _base_dir() -> Path:
+        if getattr(sys, "frozen", False):
+            return Path(sys.executable).parent
+        return Path(__file__).parent
+
     def _ensure_images_dir(self):
-        images_dir = Path(DEFAULT_INPUT_DIR).resolve()
+        images_dir = self._base_dir() / DEFAULT_INPUT_DIR
         if not images_dir.exists():
             images_dir.mkdir()
 
@@ -53,7 +59,7 @@ class App:
             row=0, column=0, sticky="e", padx=(10, 4), pady=(10, 4)
         )
         self.input_dir_var = tk.StringVar(
-            value=str(Path(DEFAULT_INPUT_DIR).resolve())
+            value=str(self._base_dir() / DEFAULT_INPUT_DIR)
         )
         self.input_dir_entry = tk.Entry(
             self.root, textvariable=self.input_dir_var, width=40
@@ -71,7 +77,7 @@ class App:
             row=1, column=0, sticky="e", padx=(10, 4), pady=4
         )
         self.output_var = tk.StringVar(
-            value=str(Path(DEFAULT_OUTPUT).resolve())
+            value=str(self._base_dir() / DEFAULT_OUTPUT)
         )
         tk.Entry(self.root, textvariable=self.output_var, width=40).grid(
             row=1, column=1, padx=4, pady=4
