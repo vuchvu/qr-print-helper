@@ -1,0 +1,37 @@
+# Changes here will be overwritten by Copier; do NOT edit
+_commit: d4aceea
+_src_path: gh:vuchvu/repository-template
+project_name: qr-print-helper
+project_specific_agents: '## PRラベル
+
+
+    | ラベル | 用途 |
+
+    |---|---|
+
+    | `major` / `minor` / `patch` | バージョンバンプの種別を指定（develop→main PRに付ける） |
+
+
+    バージョンバンプラベルがないと `tag.yml` がスキップされ、リリースされないので必ず付けること。
+
+
+    ## リリースフロー
+
+
+    1. develop→main の PR に `major`/`minor`/`patch` ラベルを付けてマージ
+
+    2. `tag.yml` が自動でバージョンバンプ・コミット・タグ付け・プッシュを行う
+
+    3. タグプッシュをトリガーに `deploy.yml` がビルド・リリースを行う
+
+
+    **タグは手動で作成しない**（複数タグの同時プッシュによりワークフローが発火しない場合がある）。
+
+
+    ## develop→main のマージ方法
+
+
+    `Merge commit` または `Rebase and merge` を使う。`Squash and merge` にすると個別のコミットメッセージが失われ、git-cliff
+    のchangelogが正しく生成されない。
+
+    '
