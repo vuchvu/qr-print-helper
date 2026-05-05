@@ -22,6 +22,14 @@ qr-print-helper = "cli:main"
 [project.gui-scripts]
 qr-print-helper-gui = "gui:main"
 
+[tool.ruff]
+target-version = "py312"
+
 [tool.setuptools]
 py-modules = ["cli", "gui"]
 packages = ["core"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.12",
+]
