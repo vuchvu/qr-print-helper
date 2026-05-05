@@ -4,6 +4,7 @@ from reportlab.lib.utils import ImageReader
 from PIL import Image
 import math
 import os
+from pathlib import Path
 
 def create_layout_pdf(items: dict, out_path: str = "labels.pdf",
                      cols: int = 2, rows: int = 3,
@@ -69,7 +70,7 @@ def create_layout_pdf(items: dict, out_path: str = "labels.pdf",
                         draw_y = img_y + (img_h - draw_h)/2
                         img_reader = ImageReader(img_path)
                         c.drawImage(img_reader, draw_x, draw_y, draw_w, draw_h, preserveAspectRatio=True)
-                except Exception:
+                except Exception as e:
                     c.setFont("Helvetica", 10)
                     c.drawString(img_x, img_y + img_h/2, f"IMAGE ERROR: {os.path.basename(img_path)}")
             else:
