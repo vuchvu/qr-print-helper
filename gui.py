@@ -20,6 +20,7 @@ from core.constants import (
     LABEL_ROWS,
 )
 from core.layout import create_layout_pdf
+from core.models import LayoutConfig
 
 
 class App:
@@ -183,10 +184,12 @@ class App:
 
         try:
             create_layout_pdf(
-                mapping,
-                out_path=str(output_path),
-                cols=self.col_var.get(),
-                rows=self.row_var.get(),
+                LayoutConfig(
+                    items=mapping,
+                    out_path=str(output_path),
+                    cols=self.col_var.get(),
+                    rows=self.row_var.get(),
+                )
             )
             self.status_var.set(f"完了しました: {output_path}")
             self._open_file(output_path)

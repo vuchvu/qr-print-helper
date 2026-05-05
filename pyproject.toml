@@ -31,5 +31,6 @@ packages = ["core"]
 
 [dependency-groups]
 dev = [
+    "pydantic>=2.13.3",
     "ruff>=0.15.12",
 ]
