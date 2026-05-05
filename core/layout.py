@@ -5,15 +5,16 @@ from PIL import Image
 import math
 import os
 
-def create_layout_pdf(items: dict, out_path: str = "labels.pdf",
-                     cols: int = 2, rows: int = 3,
-                     margin: float = 36):
-    """
-    items: {key: image_path, ...}
-    out_path: 出力PDFパス
-    cols, rows: 1ページあたりの列数と行数
-    margin: ページ外周マージン (points)
-    """
+from core.models import LayoutConfig
+
+
+def create_layout_pdf(config: LayoutConfig):
+    items = config.items
+    out_path = config.out_path
+    cols = config.cols
+    rows = config.rows
+    margin = config.margin
+
     pw, ph = A4
     c = canvas.Canvas(out_path, pagesize=A4)
     cell_w = (pw - 2*margin) / cols
