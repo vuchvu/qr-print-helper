@@ -17,6 +17,7 @@ from core.constants import (
     LABEL_ROWS,
 )
 from core.layout import create_layout_pdf
+from core.models import LayoutConfig
 
 
 def build_parser():
@@ -63,10 +64,12 @@ def main():
         raise FileNotFoundError(ERR_NO_IMAGES.format(input_dir=input_dir))
 
     create_layout_pdf(
-        mapping,
-        out_path=args.output,
-        cols=args.col,
-        rows=args.row,
+        LayoutConfig(
+            items=mapping,
+            out_path=args.output,
+            cols=args.col,
+            rows=args.row,
+        )
     )
 
 
