@@ -28,13 +28,10 @@ project_specific_agents: '## PRラベル
     **タグは手動で作成しない**（複数タグの同時プッシュによりワークフローが発火しない場合がある）。
 
 
-    ## develop→main のマージ方法（本リリース）
+    ## develop→main のマージ方法
 
 
-    > [!WARNING]
-
-    > **必ず `Rebase and merge` を使うこと。**
-
-    > `Squash and merge` にすると個別のコミットメッセージが失われ、git-cliff の changelog が空になる。
+    `Merge commit` または `Rebase and merge` を使う。`Squash and merge` にすると個別のコミットメッセージが失われ、git-cliff
+    のchangelogが正しく生成されない。
 
     '
