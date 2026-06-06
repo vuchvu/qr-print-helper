@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows-latest
+          - os: windows-2025-vs2026
             suffix: windows
           - os: macos-latest
             suffix: macos-arm64
@@ -26,11 +26,10 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
         with:
-          python-version-file: .python-version
           enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --extra build
+        run: uv sync --extra build --no-dev
 
       - name: Build with Nuitka (Windows)
         if: runner.os == 'Windows'
