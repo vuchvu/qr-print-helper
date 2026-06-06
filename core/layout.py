@@ -5,6 +5,7 @@ from PIL import Image
 import math
 import os
 
+from core.constants import ERR_IMAGE_NOT_FOUND, ERR_PDF_GENERATION
 from core.models import LayoutConfig
 
 
@@ -59,23 +60,20 @@ def create_layout_pdf(config: LayoutConfig):
             img_h = h - text_height - 3*pad
 
             # 画像読み込みとアスペクト比維持でフィットしたサイズで描画
-            if os.path.exists(img_path):
-                try:
-                    with Image.open(img_path) as im:
-                        iw, ih = im.size
-                        scale = min(img_w / iw, img_h / ih)
-                        draw_w = iw * scale
-                        draw_h = ih * scale
-                        draw_x = img_x + (img_w - draw_w)/2
-                        draw_y = img_y + (img_h - draw_h)/2
-                        img_reader = ImageReader(img_path)
-                        c.drawImage(img_reader, draw_x, draw_y, draw_w, draw_h, preserveAspectRatio=True)
-                except Exception:
-                    c.setFont("Helvetica", 10)
-                    c.drawString(img_x, img_y + img_h/2, f"IMAGE ERROR: {os.path.basename(img_path)}")
-            else:
-                c.setFont("Helvetica", 10)
-                c.drawString(img_x, img_y + img_h/2, "MISSING IMAGE")
+            if not os.path.exists(img_path):
+                raise FileNotFoundError(ERR_IMAGE_NOT_FOUND.format(img_path=img_path))
+            try:
+                with Image.open(img_path) as im:
+                    iw, ih = im.size
+                    scale = min(img_w / iw, img_h / ih)
+                    draw_w = iw * scale
+                    draw_h = ih * scale
+                    draw_x = img_x + (img_w - draw_w)/2
+                    draw_y = img_y + (img_h - draw_h)/2
+                    img_reader = ImageReader(img_path)
+                    c.drawImage(img_reader, draw_x, draw_y, draw_w, draw_h, preserveAspectRatio=True)
+            except Exception:
+                raise RuntimeError(ERR_PDF_GENERATION.format(filename=os.path.basename(img_path)))
 
             idx += 1
 

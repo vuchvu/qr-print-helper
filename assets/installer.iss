@@ -3,7 +3,7 @@
 [Setup]
 AppName=QR Print Helper
 AppVersion=1.1.2
-AppPublisher=Your Name
+AppPublisher=vuchvu
 AppPublisherURL=https://github.com/vuchvu/qr-print-helper
 DefaultDirName={userdocs}\QR Print Helper
 DefaultGroupName=QR Print Helper

@@ -22,6 +22,9 @@ qr-print-helper = "cli:main"
 [project.gui-scripts]
 qr-print-helper-gui = "gui:main"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.ruff]
 target-version = "py312"
 
@@ -32,5 +35,6 @@ packages = ["core"]
 [dependency-groups]
 dev = [
     "pydantic>=2.13.3",
+    "pytest>=9.0.3",
     "ruff>=0.15.12",
 ]
