@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - develop
+      - feature/issue-69-windows-vs2026
 
 jobs:
   build-test:
