@@ -5,7 +5,8 @@ echo "Running ruff check..."
 uv run ruff check .
 
 echo "Running pytest..."
-uv run pytest; exit_code=$?
+exit_code=0
+uv run pytest || exit_code=$?
 [ $exit_code -eq 0 ] || [ $exit_code -eq 5 ] || exit $exit_code
 
 echo "All checks passed."
