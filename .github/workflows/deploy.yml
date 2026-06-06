@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows-latest
+          - os: windows-2025-vs2026
             suffix: windows
           - os: macos-latest
             suffix: macos-arm64
