@@ -1,0 +1,55 @@
+name: バグ報告
+description: 不具合の報告
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: edition
+    attributes:
+      label: 利用形態
+      options:
+        - GUI版（Windowsインストーラー）
+        - GUI版（Windows zip）
+        - GUI版（macOS）
+        - CLI版（uvx / uv tool）
+        - CLI版（python）
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: バージョン
+      description: リリースページのバージョン番号。リポジトリを直接使っている場合はコミットハッシュ
+      placeholder: v1.1.3
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: Windows 11 / macOS 15 など
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: 入力画像の枚数やファイル名など、条件が分かるように書いてください
+      placeholder: |
+        1. images フォルダに PNG を3枚保存する
+        2. 「PDF生成」ボタンを押す
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待した動作
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の動作
+      description: エラーメッセージやスクリーンショットがあれば添付してください
+    validations:
+      required: true
