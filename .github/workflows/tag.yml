@@ -59,4 +59,4 @@ jobs:
           git commit -m "v${next}"
           git tag "v${next}"
           git remote set-url origin "https://x-access-token:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}.git"
-          git push origin main --tags
+          git push --atomic origin main "v${next}"
