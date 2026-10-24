@@ -2,7 +2,7 @@
 
 [Setup]
 AppName=QR Print Helper
-AppVersion=1.1.3
+AppVersion=1.1.4
 AppPublisher=vuchvu
 AppPublisherURL=https://github.com/vuchvu/qr-print-helper
 DefaultDirName={userdocs}\QR Print Helper
@@ -17,7 +17,7 @@ WizardStyle=modern
 SetupIconFile=icon.ico
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-VersionInfoVersion=1.1.3
+VersionInfoVersion=1.1.4
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
