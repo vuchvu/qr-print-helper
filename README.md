@@ -1,7 +1,7 @@
 # qr-print-helper
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/vuchvu/qr-print-helper)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/vuchvu/qr-print-helper/deploy.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/vuchvu/qr-print-helper/ci.yml?branch=main&label=CI)](https://github.com/vuchvu/qr-print-helper/actions/workflows/ci.yml)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/vuchvu/qr-print-helper)
 ![GitHub License](https://img.shields.io/github/license/vuchvu/qr-print-helper)
 
